@@ -24,6 +24,7 @@ dependencies:
 - sdl2
 - mtl
 - lens
+- linear
 - vector
 
 ghc-options:

@@ -1,43 +1,14 @@
-{-# LANGUAGE OverloadedStrings #-}
+module Grid where
 
-module Main (main) where
-
-import Control.Lens
-import Control.Monad (unless, when)
+import Control.Lens.Operators
+import Control.Monad (when)
 import Control.Monad.IO.Class (MonadIO)
 import Data.Vector ((!))
-import Data.Word (Word8)
 import Foreign.C.Types (CInt)
 import Life.State
 import SDL
+import SDL.Util
 import Util (genIndices)
-
-main :: IO ()
-main = do
-  initializeAll
-  window <- createWindow "My SDL Application" defaultWindow
-  renderer <- createRenderer window (-1) defaultRenderer {rendererType = AcceleratedRenderer}
-  appLoop renderer $ gliderLife $ V2 25 25
-  destroyWindow window
-
-type Color = V4 Word8
-
-appLoop :: Renderer -> LifeState -> IO ()
-appLoop renderer state = do
-  events <- pollEvents
-  let eventIsQPress event =
-        case eventPayload event of
-          KeyboardEvent keyboardEvent ->
-            keyboardEventKeyMotion keyboardEvent == Pressed
-              && keysymKeycode (keyboardEventKeysym keyboardEvent) == KeycodeQ
-          _ -> False
-      qPressed = any eventIsQPress events
-  rendererDrawColor renderer $= V4 255 255 255 255
-  clear renderer
-  drawGrid renderer (Grid (V4 0 0 0 255) (V2 25 25) 20) state (V2 0 0)
-  present renderer
-  delay 50
-  unless qPressed (appLoop renderer $ lifeStep state)
 
 data Grid = Grid
   { -- | Color of the lines
@@ -47,13 +18,6 @@ data Grid = Grid
     -- | Size of each square (edgelength)
     gridSqSize :: CInt
   }
-
-withColor :: (MonadIO m) => Renderer -> Color -> (Renderer -> m ()) -> m ()
-withColor renderer color f = do
-  old <- get $ rendererDrawColor renderer
-  rendererDrawColor renderer $= color
-  f renderer
-  rendererDrawColor renderer $= old
 
 -- | Line{horiz/vert} start length
 data Line = LineH (Point V2 CInt) CInt | LineV (Point V2 CInt) CInt

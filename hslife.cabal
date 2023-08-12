@@ -25,7 +25,11 @@ source-repository head
 
 library
   exposed-modules:
+      Grid
       Lib
+      Life.State
+      SDL.Util
+      Util
   other-modules:
       Paths_hslife
   hs-source-dirs:
@@ -34,6 +38,7 @@ library
   build-depends:
       base >=4.7 && <5
     , lens
+    , linear
     , mtl
     , sdl2
     , vector
@@ -50,6 +55,7 @@ executable hslife-exe
       base >=4.7 && <5
     , hslife
     , lens
+    , linear
     , mtl
     , sdl2
     , vector
@@ -67,6 +73,7 @@ test-suite hslife-test
       base >=4.7 && <5
     , hslife
     , lens
+    , linear
     , mtl
     , sdl2
     , vector
