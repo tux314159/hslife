@@ -100,8 +100,6 @@ gridStep grid =
       ]
     compcell neigh =
       case sum . tail $ neigh of
-        x | x < 2 -> False
         2 -> head neigh
         3 -> True
-        x | x > 3 -> False
         _ -> False
