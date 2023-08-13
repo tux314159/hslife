@@ -25,10 +25,10 @@ source-repository head
 
 library
   exposed-modules:
-      Grid
       Lib
       Life.State
       SDL.Util
+      UI.Grid
       Util
   other-modules:
       Paths_hslife

@@ -1,4 +1,8 @@
-module Grid where
+module UI.Grid
+  ( Grid (..),
+    drawGrid,
+  )
+where
 
 import Control.Lens.Operators
 import Control.Monad (when)

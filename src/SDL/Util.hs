@@ -12,4 +12,3 @@ withColor renderer color f = do
   rendererDrawColor renderer $= color
   f renderer
   rendererDrawColor renderer $= old
-
