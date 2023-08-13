@@ -39,17 +39,10 @@ lifeStep life =
     sy = length life
     v !% i = v ! (i `mod` sx)
     v !%% i = v ! (i `mod` sy)
-    neighbours (x, y) =
-      [ life ! y ! x, -- head of this has itself
-        life !%% (y - 1) !% (x - 1),
-        life !%% (y - 1) !% x,
-        life !%% (y - 1) !% (x + 1),
-        life !%% y !% (x - 1),
-        life !%% y !% (x + 1),
-        life !%% (y + 1) !% (x - 1),
-        life !%% (y + 1) !% x,
-        life !%% (y + 1) !% (x + 1)
-      ]
+    dy y = (+ y) <$> [0, -1, -1, -1, 0, 0, 1, 1, 1]
+    dx x = (+ x) <$> [0, -1, 0, 1, -1, 1, -1, 0, 1]
+    -- NOTE: head of this has the cell itself
+    neighbours (x, y) = zipWith (!%) ((life !%%) <$> dy y) $ dx x
     compcell neigh =
       case sum . map fromBool . tail $ neigh of
         2 -> head neigh
