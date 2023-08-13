@@ -10,28 +10,44 @@ import Control.Lens (ix)
 import Control.Lens.Operators
 import Data.Vector ((!))
 import qualified Data.Vector as V
-import Linear.V2 (V2, _x, _y)
-import Util (fromBool, genIndices)
+import Grid
+import Linear.V2 (V2 (..), _x, _y)
+import Util
 
-type LifeState = V.Vector (V.Vector Bool)
+type VVBool = V.Vector (V.Vector Bool)
+
+newtype LifeState = LifeState
+  { -- | State of grid, on/off
+    lifeState :: VVBool
+  }
+
+-- Lenses for the new type
+_lifeState :: Functor f => (VVBool -> f VVBool) -> LifeState -> f LifeState
+_lifeState f (LifeState st) = LifeState <$> f st
+{-# INLINE _lifeState #-}
+
+instance GridState LifeState where
+  gridStateAt (LifeState st) x y = st ! fromIntegral x ! fromIntegral y
+  gridSize (LifeState g) = V2 (length $ V.head g) $ length g
 
 -- | Empty Game of Life board
 emptyLife :: V2 Int -> LifeState
-emptyLife size = V.replicate (size ^. _y) $ V.replicate (size ^. _x) False
+emptyLife size =
+  LifeState (V.replicate (size ^. _y) $ V.replicate (size ^. _x) False)
 
 -- | A single glider in a game of life board
 gliderLife :: V2 Int -> LifeState
 gliderLife size =
   emptyLife size
-    & ix 0 . ix 1 .~ True
-    & ix 1 . ix 2 .~ True
-    & ix 2 . ix 0 .~ True
-    & ix 2 . ix 1 .~ True
-    & ix 2 . ix 2 .~ True
+    & _lifeState . ix 0 . ix 1 .~ True
+    & _lifeState . ix 1 . ix 2 .~ True
+    & _lifeState . ix 2 . ix 0 .~ True
+    & _lifeState . ix 2 . ix 1 .~ True
+    & _lifeState . ix 2 . ix 2 .~ True
 
 lifeStep :: LifeState -> LifeState
-lifeStep life =
-  V.fromList $ V.fromList . fmap (compcell . neighbours) <$> genIndices sx sy
+lifeStep (LifeState life) =
+  LifeState $ V.fromList $ V.fromList . fmap (compcell . neighbours) <$> genIndices sx sy
   where
     (sx, sy) = (length $ V.head life, length life)
     v !% i = v ! (i `mod` sx)

@@ -1,22 +1,26 @@
 {-# LANGUAGE OverloadedStrings #-}
+{-# LANGUAGE FlexibleContexts #-}
 
 module Main (main) where
 
 import Control.Monad (unless)
+import Data.Reflection
+import Grid
+import Grid.Draw
 import Life.State
 import SDL
-import UI.Grid (Grid (..), drawGrid)
 
 main :: IO ()
 main = do
   initializeAll
   window <- createWindow "My SDL Application" defaultWindow
   renderer <- createRenderer window (-1) defaultRenderer {rendererType = AcceleratedRenderer}
-  appLoop renderer $ gliderLife $ V2 25 25
+  give renderer $ appLoop $ gliderLife $ V2 25 25
   destroyWindow window
 
-appLoop :: Renderer -> LifeState -> IO ()
-appLoop renderer state = do
+appLoop :: (Given Renderer) => LifeState -> IO ()
+appLoop state = do
+  let renderer = given
   events <- pollEvents
   let eventIsQPress event =
         case eventPayload event of
@@ -27,7 +31,7 @@ appLoop renderer state = do
       qPressed = any eventIsQPress events
   rendererDrawColor renderer $= V4 255 255 255 255
   clear renderer
-  drawGrid renderer (Grid (V4 0 0 0 255) (V2 25 25) 20) state (V2 0 0)
+  drawGrid (Grid (V4 0 0 0 255) 20 state) (V2 0 0)
   present renderer
   delay 50
-  unless qPressed (appLoop renderer $ lifeStep state)
+  unless qPressed (appLoop $ lifeStep state)
