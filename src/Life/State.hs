@@ -31,12 +31,9 @@ gliderLife size =
 
 lifeStep :: LifeState -> LifeState
 lifeStep life =
-  V.fromList $
-    V.fromList . fmap (compcell . neighbours)
-      <$> genIndices sx sy
+  V.fromList $ V.fromList . fmap (compcell . neighbours) <$> genIndices sx sy
   where
-    sx = length $ V.head life
-    sy = length life
+    (sx, sy) = (length $ V.head life, length life)
     v !% i = v ! (i `mod` sx)
     v !%% i = v ! (i `mod` sy)
     dy y = (+ y) <$> [0, -1, -1, -1, 0, 0, 1, 1, 1]
