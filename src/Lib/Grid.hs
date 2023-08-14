@@ -1,6 +1,6 @@
 {-# LANGUAGE GADTs #-}
 
-module Grid
+module Lib.Grid
   ( Grid (..),
     GridState (..),
   )

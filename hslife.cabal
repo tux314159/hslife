@@ -25,12 +25,11 @@ source-repository head
 
 library
   exposed-modules:
-      Grid
-      Grid.Draw
-      Lib
-      Life.State
+      Lib.Grid
+      Lib.Grid.Draw
+      Lib.Life.State
+      Lib.Util
       SDL.Util
-      Util
   other-modules:
       Paths_hslife
   hs-source-dirs:

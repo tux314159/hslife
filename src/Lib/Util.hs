@@ -1,4 +1,4 @@
-module Util
+module Lib.Util
   ( fromBool,
     genIndices,
   )

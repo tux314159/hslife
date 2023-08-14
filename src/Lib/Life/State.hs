@@ -1,4 +1,4 @@
-module Life.State
+module Lib.Life.State
   ( LifeState,
     emptyLife,
     gliderLife,
@@ -10,9 +10,9 @@ import Control.Lens (ix)
 import Control.Lens.Operators
 import Data.Vector ((!))
 import qualified Data.Vector as V
-import Grid
+import Lib.Grid
+import Lib.Util
 import Linear.V2 (V2 (..), _x, _y)
-import Util
 
 type VVBool = V.Vector (V.Vector Bool)
 

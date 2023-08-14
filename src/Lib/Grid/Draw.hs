@@ -1,6 +1,6 @@
 {-# LANGUAGE FlexibleContexts #-}
 
-module Grid.Draw
+module Lib.Grid.Draw
   ( drawGrid,
   )
 where
@@ -9,10 +9,10 @@ import Control.Lens.Operators
 import Control.Monad (when)
 import Control.Monad.IO.Class (MonadIO)
 import Data.Reflection
-import Grid
+import Lib.Grid
+import Lib.Util
 import SDL
 import SDL.Util
-import Util
 
 -- | Render a grid.
 drawGrid :: (MonadIO m, GridState gs, Given Renderer) => Grid gs -> V2 Int -> m ()

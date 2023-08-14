@@ -1,13 +1,13 @@
-{-# LANGUAGE OverloadedStrings #-}
 {-# LANGUAGE FlexibleContexts #-}
+{-# LANGUAGE OverloadedStrings #-}
 
 module Main (main) where
 
 import Control.Monad (unless)
 import Data.Reflection
-import Grid
-import Grid.Draw
-import Life.State
+import Lib.Grid
+import Lib.Grid.Draw
+import Lib.Life.State
 import SDL
 
 main :: IO ()
