@@ -3,7 +3,7 @@
 
 module Main (main) where
 
-import Control.Monad (unless)
+import Control.Monad (unless, when)
 import Data.Reflection
 import Lib.Grid
 import Lib.Grid.Draw
@@ -15,11 +15,11 @@ main = do
   initializeAll
   window <- createWindow "My SDL Application" defaultWindow
   renderer <- createRenderer window (-1) defaultRenderer {rendererType = AcceleratedRenderer}
-  give renderer $ appLoop $ gliderLife $ V2 25 25
+  give renderer $ appLoop 0 $ gliderLife $ V2 25 25
   destroyWindow window
 
-appLoop :: (Given Renderer) => LifeState -> IO ()
-appLoop state = do
+appLoop :: (Given Renderer) => Int -> LifeState -> IO ()
+appLoop frame state = do
   let renderer = given
   events <- pollEvents
   let eventIsQPress event =
@@ -29,9 +29,13 @@ appLoop state = do
               && keysymKeycode (keyboardEventKeysym keyboardEvent) == KeycodeQ
           _ -> False
       qPressed = any eventIsQPress events
+  -- Step
+  let state' = if frame `rem` 50 == 0 then lifeStep state else state
+  -- Background
   rendererDrawColor renderer $= V4 255 255 255 255
   clear renderer
-  drawGrid (Grid (V4 0 0 0 255) 20 state) (V2 0 0)
+  -- Draw
+  drawGrid (Grid (V4 0 0 0 255) 20 state') (V2 0 0)
+  -- Render
   present renderer
-  delay 50
-  unless qPressed (appLoop $ lifeStep state)
+  unless qPressed (appLoop (succ $ frame `rem` 50) state')
