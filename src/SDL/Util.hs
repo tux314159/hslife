@@ -1,4 +1,10 @@
-module SDL.Util where
+module SDL.Util
+  ( Color,
+    withColor,
+    LineRect (..),
+    drawRectLine,
+  )
+where
 
 import Control.Monad.IO.Class (MonadIO)
 import Data.Word (Word8)

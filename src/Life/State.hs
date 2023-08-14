@@ -16,10 +16,7 @@ import Util
 
 type VVBool = V.Vector (V.Vector Bool)
 
-newtype LifeState = LifeState
-  { -- | State of grid, on/off
-    lifeState :: VVBool
-  }
+newtype LifeState = LifeState VVBool
 
 -- Lenses for the new type
 _lifeState :: Functor f => (VVBool -> f VVBool) -> LifeState -> f LifeState
