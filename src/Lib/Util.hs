@@ -1,6 +1,7 @@
 module Lib.Util
   ( fromBool,
     genIndices,
+    toBool,
   )
 where
 
@@ -12,3 +13,8 @@ genIndices x y = zipWith zip (replicate (fromIntegral y) [0 .. x - 1]) (replicat
 fromBool :: Bool -> Int
 fromBool False = 0
 fromBool True = 1
+
+-- | What do you think
+toBool :: Int -> Bool
+toBool 0 = False
+toBool _ = True

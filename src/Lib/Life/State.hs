@@ -1,12 +1,14 @@
 module Lib.Life.State
   ( LifeState,
     emptyLife,
-    gliderLife,
+    gliderPat,
     lifeStep,
+    putPattern,
   )
 where
 
-import Control.Lens (ix)
+import Control.Lens.At (ix)
+import Control.Lens.Indexed (imap)
 import Control.Lens.Operators
 import Data.Vector ((!))
 import qualified Data.Vector as V
@@ -32,15 +34,20 @@ emptyLife :: V2 Int -> LifeState
 emptyLife size =
   LifeState (V.replicate (size ^. _y) $ V.replicate (size ^. _x) False)
 
--- | A single glider in a game of life board
-gliderLife :: V2 Int -> LifeState
-gliderLife size =
-  emptyLife size
-    & _lifeState . ix 0 . ix 1 .~ True
-    & _lifeState . ix 1 . ix 2 .~ True
-    & _lifeState . ix 2 . ix 0 .~ True
-    & _lifeState . ix 2 . ix 1 .~ True
-    & _lifeState . ix 2 . ix 2 .~ True
+-- | Put a pattern at a position on a board
+putPattern :: [[Bool]] -> V2 Int -> LifeState -> LifeState
+putPattern pat (V2 x y) =
+  foldr (.) id (concat $ imap (imap . setCell) pat)
+  where
+    setCell dy dx c = _lifeState . ix (y + dy) . ix (x + dx) .~ c
+
+-- | A single glider
+gliderPat :: [[Bool]]
+gliderPat = (toBool <$>) <$>
+  [ [0, 1, 0],
+    [0, 0, 1],
+    [1, 1, 1]
+  ]
 
 lifeStep :: LifeState -> LifeState
 lifeStep (LifeState life) =
