@@ -6,8 +6,6 @@ module Lib.Grid
   )
 where
 
-import Control.Lens.Operators
-import Control.Lens.At
 import qualified Data.Vector as V
 import Linear.V2 (V2 (..))
 import SDL.Util
