@@ -6,6 +6,7 @@ module Lib.Grid.Draw
 where
 
 import Control.Lens.Operators
+import Control.Lens.At
 import Control.Monad (when)
 import Control.Monad.IO.Class (MonadIO)
 import Data.Reflection
@@ -15,7 +16,7 @@ import SDL
 import SDL.Util
 
 -- | Render a grid.
-drawGrid :: (MonadIO m, GridState gs, Given Renderer) => Grid gs -> V2 Int -> m ()
+drawGrid :: (MonadIO m, Given Renderer) => Grid Bool -> V2 Int -> m ()
 drawGrid grid pos = do
   let renderer = given
   withColor renderer (gridColor grid) $ \r -> do
@@ -23,7 +24,7 @@ drawGrid grid pos = do
     mapM_ (drawRectLine r) vlines
   withColor renderer (V4 124 252 0 0) $ \r ->
     mapM_
-      (mapM_ $ \(x, y) -> when ((gridStateAt . gridState $ grid) y x) $ squareAt r x y)
+      (mapM_ $ \(x, y) -> when (gridState grid ^. _gridState . ix y ^?! ix x) $ squareAt r x y)
       $ genIndices (gsq ^. _x) (gsq ^. _y)
   where
     -- For drawing the grid
