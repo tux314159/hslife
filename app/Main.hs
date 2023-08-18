@@ -4,7 +4,7 @@
 module Main (main) where
 
 import Control.Monad (unless)
-import Control.Monad.IO.Class (MonadIO, liftIO)
+import Control.Monad.IO.Class (MonadIO)
 import Control.Monad.State.Class (MonadState)
 import Control.Monad.State.Strict (execStateT, get, put)
 import Data.Reflection
@@ -21,11 +21,8 @@ data AppState = AppState
 main :: IO ()
 main = do
   initializeAll
-  putStrLn "1"
   window <- createWindow "My SDL Application" $ defaultWindow {windowInitialSize = V2 900 900}
-  putStrLn "2"
   renderer <- createRenderer window (-1) defaultRenderer {rendererType = SoftwareRenderer}
-  putStrLn "3"
   _ <- execStateT (give renderer appLoop) initialState
   destroyWindow window
   where
@@ -41,7 +38,6 @@ appLoop = do
   frame <- appFrame <$> get
   state <- appLifeState <$> get
 
-  liftIO $ putStrLn "4"
   startTime <- ticks
   -- Handle events
   events <- pollEvents
@@ -52,7 +48,6 @@ appLoop = do
               && keysymKeycode (keyboardEventKeysym keyboardEvent) == KeycodeQ
           _ -> False
       qPressed = any eventIsQPress events
-  liftIO $ putStrLn "5"
   -- Step
   let state' = if frame == 0 then lifeStep state else state
   -- Background
@@ -61,9 +56,7 @@ appLoop = do
   -- Draw
   give renderer $ drawGrid (Grid (V4 0 0 0 255) 10 state') (V2 0 0)
   -- Render
-  liftIO $ putStrLn "6"
   present renderer
-  liftIO $ putStrLn "7"
   -- We want 60fps
   endTime <- ticks
   delay (17 - (endTime - startTime))
