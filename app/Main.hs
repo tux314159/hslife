@@ -59,7 +59,7 @@ appLoop = do
   present renderer
   -- We want 60fps
   endTime <- ticks
-  delay (17 - (endTime - startTime))
+  delay $ max 0 (17 - (endTime - startTime))
 
   put $ AppState (succ frame `rem` 2) state'
   unless qPressed appLoop
