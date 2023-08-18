@@ -4,7 +4,7 @@
 module Main (main) where
 
 import Control.Monad (unless)
-import Control.Monad.IO.Class (MonadIO)
+import Control.Monad.IO.Class (MonadIO, liftIO)
 import Control.Monad.State.Class (MonadState)
 import Control.Monad.State.Strict (execStateT, get, put)
 import Data.Reflection
@@ -58,8 +58,12 @@ appLoop = do
   -- Render
   present renderer
   -- We want 60fps
+  liftIO $ putStrLn "1"
   endTime <- ticks
+  liftIO $ putStrLn "2"
   delay $ max 0 (17 - (endTime - startTime))
+  liftIO $ putStrLn "3"
 
   put $ AppState (succ frame `rem` 2) state'
+  liftIO $ putStrLn "4"
   unless qPressed appLoop
