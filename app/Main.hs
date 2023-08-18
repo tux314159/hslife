@@ -21,11 +21,16 @@ data AppState = AppState
 main :: IO ()
 main = do
   initializeAll
-  window <- createWindow "My SDL Application" defaultWindow
+  window <- createWindow "My SDL Application" $ defaultWindow {windowInitialSize = V2 900 900}
   renderer <- createRenderer window (-1) defaultRenderer {rendererType = AcceleratedRenderer}
-  let initialState = AppState 1 $ putPattern gosperPat (V2 0 0) (emptyLife $ V2 50 50)
   _ <- execStateT (give renderer appLoop) initialState
   destroyWindow window
+  where
+    initialGrid =
+      putPattern gosperPat (V2 10 0) $
+        putPattern (reverse $ reverse <$> gosperPat) (V2 0 60) $
+          emptyLife $ V2 75 75
+    initialState = AppState 1 initialGrid
 
 appLoop :: (Given Renderer, MonadIO m, MonadState AppState m) => m ()
 appLoop = do
@@ -52,9 +57,9 @@ appLoop = do
   give renderer $ drawGrid (Grid (V4 0 0 0 255) 10 state') (V2 0 0)
   -- Render
   present renderer
-  -- We want 30fps
+  -- We want 60fps
   endTime <- ticks
-  delay (33 - (endTime - startTime))
+  delay (17 - (endTime - startTime))
 
   put $ AppState (succ frame `rem` 2) state'
   unless qPressed appLoop
