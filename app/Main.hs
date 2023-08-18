@@ -55,7 +55,7 @@ appLoop = do
   rendererDrawColor renderer $= V4 255 255 255 255
   clear renderer
   -- Draw
-  give renderer $ drawGrid (Grid (V4 0 0 0 255) 10 state') (V2 0 0)
+  drawGrid (Grid (V4 0 0 0 255) 10 state') (V2 0 0)
   -- Render
   present renderer
   -- We want 60fps

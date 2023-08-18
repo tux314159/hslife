@@ -32,31 +32,31 @@ putPattern pat (V2 x y) =
   where
     setCell dy dx c = _gridState . ix (y + dy) . ix (x + dx) .~ c
 
-
 -- | Convert a string of '-' 'X' '\n' into a pattern
 toPat :: String -> [[Bool]]
 toPat s = map (== 'X') <$> splitOn "\n" s
 
 -- | A single glider
 gliderPat :: [[Bool]]
-gliderPat = toPat
-  "-X-\n\
-  \--X\n\
-  \XXX"
+gliderPat =
+  toPat
+    "-X-\n\
+    \--X\n\
+    \XXX"
 
 -- | Gosper glider gun
 gosperPat :: [[Bool]]
-gosperPat = toPat
-  "--------------------------X-----------\n\
-  \------------------------X-X-----------\n\
-  \--------------XX------XX------------XX\n\
-  \-------------X---X----XX------------XX\n\
-  \--XX--------X-----X---XX--------------\n\
-  \--XX--------X---X-XX----X-X-----------\n\
-  \------------X-----X-------X-----------\n\
-  \-------------X---X--------------------\n\
-  \--------------XX----------------------"
-  
+gosperPat =
+  toPat
+    "--------------------------X-----------\n\
+    \------------------------X-X-----------\n\
+    \--------------XX------XX------------XX\n\
+    \-------------X---X----XX------------XX\n\
+    \--XX--------X-----X---XX--------------\n\
+    \--XX--------X---X-XX----X-X-----------\n\
+    \------------X-----X-------X-----------\n\
+    \-------------X---X--------------------\n\
+    \--------------XX----------------------"
 
 lifeStep :: LifeState -> LifeState
 lifeStep (GridState life) =
