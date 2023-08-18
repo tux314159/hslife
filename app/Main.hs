@@ -22,7 +22,7 @@ main :: IO ()
 main = do
   initializeAll
   window <- createWindow "My SDL Application" $ defaultWindow {windowInitialSize = V2 900 900}
-  renderer <- createRenderer window (-1) defaultRenderer {rendererType = AcceleratedRenderer}
+  renderer <- createRenderer window (-1) defaultRenderer {rendererType = SoftwareRenderer}
   _ <- execStateT (give renderer appLoop) initialState
   destroyWindow window
   where
