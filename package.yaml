@@ -27,6 +27,7 @@ dependencies:
 - linear
 - vector
 - reflection
+- split
 
 ghc-options:
 - -Wall

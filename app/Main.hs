@@ -23,7 +23,7 @@ main = do
   initializeAll
   window <- createWindow "My SDL Application" defaultWindow
   renderer <- createRenderer window (-1) defaultRenderer {rendererType = AcceleratedRenderer}
-  let initialState = AppState 1 $ putPattern gliderPat (V2 0 0) (emptyLife $ V2 25 25)
+  let initialState = AppState 1 $ putPattern gosperPat (V2 0 0) (emptyLife $ V2 50 50)
   _ <- execStateT (give renderer appLoop) initialState
   destroyWindow window
 
@@ -49,7 +49,7 @@ appLoop = do
   rendererDrawColor renderer $= V4 255 255 255 255
   clear renderer
   -- Draw
-  give renderer $ drawGrid (Grid (V4 0 0 0 255) 20 state') (V2 0 0)
+  give renderer $ drawGrid (Grid (V4 0 0 0 255) 10 state') (V2 0 0)
   -- Render
   present renderer
   -- We want 30fps

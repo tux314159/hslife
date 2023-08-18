@@ -42,6 +42,7 @@ library
     , mtl
     , reflection
     , sdl2
+    , split
     , vector
   default-language: Haskell2010
 
@@ -60,6 +61,7 @@ executable hslife-exe
     , mtl
     , reflection
     , sdl2
+    , split
     , vector
   default-language: Haskell2010
 
@@ -79,5 +81,6 @@ test-suite hslife-test
     , mtl
     , reflection
     , sdl2
+    , split
     , vector
   default-language: Haskell2010
