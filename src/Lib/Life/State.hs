@@ -63,12 +63,12 @@ lifeStep (GridState life) =
   GridState $ V.fromList $ V.fromList . fmap (compcell . neighbours) <$> genIndices sx sy
   where
     (sx, sy) = (length $ V.head life, length life)
-    v !~ i = v ! (i `mod` sx)
-    v !~~ i = v ! (i `mod` sy)
+    v !%- i = v ! (i `mod` sx)
+    v !%| i = v ! (i `mod` sy)
     dy y = (+ y) <$> [0, -1, -1, -1, 0, 0, 1, 1, 1]
     dx x = (+ x) <$> [0, -1, 0, 1, -1, 1, -1, 0, 1]
     -- NOTE: head of this has the cell itself
-    neighbours (x, y) = zipWith (!~) ((life !~~) <$> dy y) $ dx x
+    neighbours (x, y) = zipWith (!%-) ((life !%|) <$> dy y) $ dx x
     compcell neigh =
       case sum . map fromBool . tail $ neigh of
         2 -> head neigh
